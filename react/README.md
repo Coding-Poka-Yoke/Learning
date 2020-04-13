@@ -4,11 +4,12 @@ Elasticsearch >6.0
 
  ####Note:create an index "employee"
  
-##List of API's Available:
+## List of API's Available:
  
  1.http://localhost:9200/employee/create/_doc/{id}    - ###[POST,PUT,DELETE]
  
  2.http://localhost:9200/employee/_search             - ###[GET]
+ 
 ## Available Scripts
 
 In the project directory, you can run:
