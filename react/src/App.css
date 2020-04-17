@@ -7,6 +7,10 @@
   pointer-events: none;
 }
 
+.button-space{
+	margin-left: 5px;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -35,4 +39,11 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.input-group>.input-group-prepend {
+    flex: 0 0 30%;
+}
+.input-group .input-group-text {
+    width: 80%;
 }

@@ -1,5 +1,15 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Prerequisite
+Elasticsearch >6.0
 
+ ####Note:create an index "employee"
+ 
+## List of API's Available:
+ 
+ 1.http://localhost:9200/employee/create/_doc/{id}    - ###[POST,PUT,DELETE]
+ 
+ 2.http://localhost:9200/employee/_search             - ###[GET]
+ 
 ## Available Scripts
 
 In the project directory, you can run:
