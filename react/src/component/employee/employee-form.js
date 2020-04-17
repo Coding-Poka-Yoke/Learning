@@ -117,7 +117,7 @@ import { addEmployee, editEmployee } from "../../actions/employee-action";
                 <div className='col-md-4 selectContainer'>
                   <div className='input-group'>
                     <span className='input-group-addon'><i className='glyphicon glyphicon-list' /></span>
-                    <select name='department' className='form-control selectpicker'>
+                    <select id='tier'name='tier' className='form-control selectpicker' value={this.state.tier} onChange={this.handleChange}>
                       <option value=''>Select Tier</option>
                       <option>0</option>
                       <option>1</option>
@@ -145,12 +145,12 @@ import { addEmployee, editEmployee } from "../../actions/employee-action";
                   <div className='input-group'>
                     <div className='form-check-inline'>
                       <label className='form-check-label' htmlFor='male'>
-                        <input type='radio' className='form-check-input' id='male' name='gender' value='male' />Male
+                        <input type='radio' className='form-check-input' id='male' name='gender' value='male' checked={this.state.gender==='male'} onChange={this.handleChange}/>Male
                       </label>
                     </div>
                     <div className='form-check-inline'>
                       <label className='form-check-label' htmlFor='female'>
-                        <input type='radio' className='form-check-input' id='female' name='gender' value='female' />Female
+                        <input type='radio' className='form-check-input' id='female' name='gender' value='female' checked={this.state.gender==='female'} onChange={this.handleChange} />Female
                       </label>
                     </div>
                   </div>
