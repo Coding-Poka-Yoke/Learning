@@ -6,7 +6,7 @@ import {getEmployees,deleteEmployee} from '../../actions/employee-action'
 
 const mapStateToProps = (state) => {
   return {
-    employees : state.employees
+    employees : state.employee.employees
   }
 }
 
@@ -18,6 +18,8 @@ const mapStateToProps = (state) => {
   }
 
   componentDidMount() {
+    //redux-saga
+    //this.props.dispatch(getData("http://localhost:9200/employee/_search"));
     this.props.dispatch(getEmployees());
   }
 

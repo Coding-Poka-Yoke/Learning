@@ -1,4 +1,4 @@
-import {ADD_EMPLOYEE, DELETE_EMPLOYEE, EDIT_EMPLOYEE, FETCH_EMPLOYEES} from '../constants/constants'
+import {ADD_EMPLOYEE, DELETE_EMPLOYEE, EDIT_EMPLOYEE, FETCH_EMPLOYEES,FETCH_EMPLOYEES_FAILURE} from '../constants/constants'
 
 const initialState={
     employees:[],
@@ -6,7 +6,7 @@ const initialState={
     isLoading:false
 };
 
-function rootReducer(state=initialState,action){
+function employeeReducer(state=initialState,action){
    console.log("Reducer-Action:"+action.type)
    console.log("Reducer-Payload:"+JSON.stringify(action.payload))
 
@@ -20,10 +20,13 @@ function rootReducer(state=initialState,action){
         case DELETE_EMPLOYEE:
             const filteredEmployees = state.employees.filter(emp=>emp.id!==action.payload)
             return{...state,employees:[...filteredEmployees,action.payload]}
+        case FETCH_EMPLOYEES_FAILURE:
+             console.log("fectch failed");
+             return state          
         default:
             return state;
  
    }
 }
 
-export default rootReducer;
+export default employeeReducer;

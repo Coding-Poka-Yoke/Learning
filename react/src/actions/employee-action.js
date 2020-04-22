@@ -16,6 +16,8 @@ export function getEmployees() {
                 result.hits.hits.map(h => retVal.push(h._source)) 
                 console.log("retVal"+JSON.stringify(retVal))
                 dispatch({ type: FETCH_EMPLOYEES, payload: retVal });
+            }).catch(error=>{
+              console.log(error);
             });
          };
   }
@@ -70,8 +72,10 @@ function saveEmployee(dispatch,type,payload){
      })
   }
 
-
-
+//redux-saga
+  //export function getData(url) {
+    //return { type: "FETCH_REQUESTED", payload: { url } };
+  //}
 
   export const fetchEmployeesBegin = () => ({
     type: FETCH_EMPLOYEES_BEGIN
