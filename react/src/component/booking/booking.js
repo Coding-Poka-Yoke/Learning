@@ -1,5 +1,8 @@
 import React,{ Component} from 'react';
 import Configuration from '../../routes'
+import moment from 'moment'
+import { connect } from "react-redux";
+import {getEmployees} from '../../actions/employee-action'
 
 const slots ={
   "5":[{"1":[{"id":"P51001","isBooked":"true"},{"id":"P51002","isBooked":"false"},{"id":"P51003","isBooked":"false"},{"id":"P51004","isBooked":"false"},{"id":"P51005","isBooked":"false"}]}],
@@ -7,7 +10,13 @@ const slots ={
   {"7":[{"id":"P1070001","isBooked":"false"},{"id":"P1070002","isBooked":"false"},{"id":"P1070003","isBooked":"false"},{"id":"P1070004","isBooked":"false"},{"id":"P1070005","isBooked":"false"}]}]
 }
 
-export default class BookingLayout extends Component{
+const mapStateToProps = (state) => {
+  return {
+    employees : state.employee.employees
+  }
+}
+
+ class BookingLayout extends Component{
 
   constructor(props){
     super(props);
@@ -15,29 +24,53 @@ export default class BookingLayout extends Component{
       block: '',
       floor:'',
       slotId:'',
-      employeeId:'',
+      employee:'',
       bookedDateTime:''
     };
     this.handleBLock = this.handleBLock.bind(this)
     this.handleFloor = this.handleFloor.bind(this)
+    this.handleEmployee = this.handleEmployee.bind(this)
+
     this.state = this.initialState
     this.floors=[];
     this.availableSlots=[];
     this.config = new Configuration()
   }
 
+  
+  componentDidMount() {
+  this.props.dispatch(getEmployees());
+  }
+
+
   getSlots(){
-    let slotId=this.availableSlots[Math.floor(Math.random() * this.availableSlots.length)].id
-    console.log("val",slotId);
+    let slotId=0;
+    if(this.availableSlots.length>0){
+       slotId=this.availableSlots[Math.floor(Math.random() * this.availableSlots.length)].id
+      console.log("val",slotId);
+    }
     return slotId
   }
-  
-  handleBLock (event) {
+
+
+  handleEmployee(event){
     const name = event.target.name
     const value = event.target.value
     this.setState({
       [name]: value
     })
+  }
+  updateState(name,value){
+    this.setState({
+      [name]: value
+    })
+  }
+  
+  
+  handleBLock (event) {
+    const name = event.target.name
+    const value = event.target.value
+    this.updateState(name,value)
    this.floors=[]
    this.availableSlots=[]
    slots[value].forEach((fl,j)=>{
@@ -45,34 +78,30 @@ export default class BookingLayout extends Component{
         this.floors.push(floor);
       })})
       this.availableSlots=slots[value]["0"][this.floors[0]].filter(ob => ob.isBooked ==="false")
-      console.log("availableSlots",JSON.stringify(this.availableSlots))
-     this.setState({floor:this.floors[0]});
+      this.updateState("floor",this.floors[0]);
   }
 
   handleFloor (event) {
     const name = event.target.name
     const value = event.target.value    
     this.availableSlots=[]
-    this.setState({
-      [name]: value
-    })
-    
+    this.updateState(name,value)
     this.availableSlots=slots[this.state.block]["1"][value].filter(ob => ob.isBooked ==="false")
-    console.log("availableSlots",JSON.stringify(this.availableSlots))
-
+}
+handleBooking(){
+  console.log("You have booked a slot:", JSON.stringify(this.state));
 }
 
-  handleFormSubmit = event => {
+handleFormSubmit = event => {
     event.preventDefault();
     var id=this.getSlots();
-    console.log("id",id);
-    
     this.setState({
-      slotId: id
-    })   
-    console.log("You have booked a slot:", JSON.stringify(this.state));
-
-  };
+      slotId: id,
+      bookedDateTime:moment()
+    },() => {
+      this.handleBooking()
+    })
+};
 
 
 render(){
@@ -115,11 +144,22 @@ render(){
                        }
                 </select>                 
               </div>
+              <div className="form-group"  hidden={this.state.floor === ''}>
+                <label htmlFor="Employee">Employee</label> 
+                <select name="employee"
+                  value={this.state.employee}
+                  onChange={this.handleEmployee}
+                  className="form-control"
+                  id="employee">
+                    <option value='' disabled="true"></option>
+                    {this.props.employees.map((emp, index) => 
+                     <option key={index} value={emp.id}>{emp.id},{emp.lastName},{emp.firstName}</option>)}
+                </select>                 
+              </div>
               <button
                 type="submit"
                 className="btn btn-primary"
-                disabled={this.state.block === ''}
-              >
+                disabled={this.state.employee === ''}>
                 Book
               </button>
             </form>
@@ -139,3 +179,6 @@ render(){
 }
 
 }
+
+export default connect(mapStateToProps)(BookingLayout);
+
