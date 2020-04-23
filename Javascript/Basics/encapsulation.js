@@ -8,7 +8,7 @@ function getWage(basicSalary, overTime, rate) {
 }
 
 
-//Object-Oriented program
+//Object-oriented program
 let person = {
     basicSalary: 40000,
     overTime: 20,
