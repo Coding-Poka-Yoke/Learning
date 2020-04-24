@@ -25,7 +25,8 @@ const mapStateToProps = (state) => {
       floor:'',
       slotId:'',
       employee:'',
-      bookedDateTime:''
+      bookedDateTime:'',
+      isBooked:false
     };
     this.handleBLock = this.handleBLock.bind(this)
     this.handleFloor = this.handleFloor.bind(this)
@@ -97,7 +98,8 @@ handleFormSubmit = event => {
     var id=this.getSlots();
     this.setState({
       slotId: id,
-      bookedDateTime:moment()
+      bookedDateTime: moment(new Date()).format('YYYY-MM-DDTHH:mm:ss.SSS'),
+      isBooked:true
     },() => {
       this.handleBooking()
     })
@@ -106,7 +108,7 @@ handleFormSubmit = event => {
 
 render(){
   return(
-    <div class="container-fluid">
+    <div className="container-fluid">
       <div className='col-md-12'>
         <nav aria-label='breadcrumb'>
           <ol className='breadcrumb'>
@@ -126,7 +128,7 @@ render(){
                   onChange={this.handleBLock}
                   className="form-control"
                   id="blook">
-                    <option value='' disabled="true"></option>
+                    <option value='' disabled={true}></option>
                     { Object.keys(slots).map((block,i)=>
                      <option key={i} value={block}>{block}</option>)}
                 </select>                 
@@ -167,14 +169,31 @@ render(){
         </div>
         
 
+      <div className="card border-dark mb-3 col-md-8 bg-light offset-md-3" hidden={this.state.isBooked === false}>
+        <div className="card-header text-white bg-dark">
+        Parking Slot Details
+        </div>
+        <div className="card-body">
+          <div className="row offset-md-1">
+            <div className="col-md-4">
+              <h6 className="card-subtitle mb-2 text-muted">Block Number : {this.state.block}</h6>
+              <h6 className="card-subtitle mb-2 text-muted">Floor Number : {this.state.floor}</h6>
+            </div>
+            <div className="col-md-4">
+              <h6 className="card-subtitle mb-2 text-muted">Employee Id : {this.state.employee}</h6>
+              <h6 className="card-subtitle mb-2 text-muted">Booked Date Time : {this.state.bookedDateTime}</h6>
+           </div>
+           <div className="col-md-4">
+            <h6 className="card-subtitle mb-2 text-muted">Parking Slot Id : {this.state.slotId}}</h6>
+           </div>  
+          </div>
+          <div class="card-footer bg-transparent border-dark text-center text-muted">
+            <a href="/" className="btn btn-success">Ok</a>
+          </div>
+        </div>
+      </div>
      
-     
-
-
-
     </div>
-
-
   );
 }
 
