@@ -7,11 +7,11 @@ let initialState={
     error:null,
     isLoading:false
 };
-localStorage.clear();
-if( localStorage.getItem("employees") === null)
-localStorage.setItem('employees',JSON.stringify(initialState));
+sessionStorage.clear();
+if( sessionStorage.getItem("employees") === null)
+sessionStorage.setItem('employees',JSON.stringify(initialState));
 else
-initialState = JSON.parse(localStorage.getItem('employees'));
+initialState = JSON.parse(sessionStorage.getItem('employees'));
 
 function employeeReducer(state=initialState,action){
    console.log("Reducer-Action:"+action.type)
@@ -21,7 +21,7 @@ function employeeReducer(state=initialState,action){
        case ADD_EMPLOYEE:
            //return {...state,employees:[...state.employees,action.payload]};
            const createEmp = {...state,employees:[...state.employees,action.payload]};
-           localStorage.setItem('employees',JSON.stringify(createEmp));
+           sessionStorage.setItem('employees',JSON.stringify(createEmp));
            return createEmp
 
         case FETCH_EMPLOYEES:
@@ -38,7 +38,7 @@ function employeeReducer(state=initialState,action){
             })
             
             const updateState = {...state,employees:retVal}            
-            localStorage.setItem('employees',JSON.stringify(updateState));
+            sessionStorage.setItem('employees',JSON.stringify(updateState));
             return updateState;
 
         case DELETE_EMPLOYEE:
@@ -47,7 +47,7 @@ function employeeReducer(state=initialState,action){
 
             const remainingEmployees = state.employees.filter(emp=>emp.id!==action.payload)
             const filteredEmployees={...state,employees:remainingEmployees}
-            localStorage.setItem('employees',JSON.stringify(filteredEmployees));
+            sessionStorage.setItem('employees',JSON.stringify(filteredEmployees));
             return filteredEmployees
             
         case FETCH_EMPLOYEES_FAILURE:
