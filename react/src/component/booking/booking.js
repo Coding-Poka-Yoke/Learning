@@ -3,16 +3,19 @@ import Configuration from '../../routes'
 import moment from 'moment'
 import { connect } from "react-redux";
 import {getEmployees} from '../../actions/employee-action'
-
-const slots ={
-  "5":[{"1":[{"id":"P51001","isBooked":"true"},{"id":"P51002","isBooked":"false"},{"id":"P51003","isBooked":"false"},{"id":"P51004","isBooked":"false"},{"id":"P51005","isBooked":"false"}]}],
-  "10":[{"5":[{"id":"P1050001","isBooked":"false"},{"id":"P1050002","isBooked":"false"},{"id":"P1050003","isBooked":"false"},{"id":"P1050004","isBooked":"false"},{"id":"P1050005","isBooked":"false"}]},
-  {"7":[{"id":"P1070001","isBooked":"false"},{"id":"P1070002","isBooked":"false"},{"id":"P1070003","isBooked":"false"},{"id":"P1070004","isBooked":"false"},{"id":"P1070005","isBooked":"false"}]}]
-}
+import {confirmBooking,getSlots} from '../../actions/bookings-action'
 
 const mapStateToProps = (state) => {
   return {
-    employees : state.employee.employees
+    employees : state.employee.employees,
+    slots : state.booking.slots,
+    booked:state.booking.booked
+  }
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    confirmBooking: (data) => dispatch(confirmBooking(data)),
+    dispatch
   }
 }
 
@@ -41,16 +44,31 @@ const mapStateToProps = (state) => {
   
   componentDidMount() {
   this.props.dispatch(getEmployees());
+  this.props.dispatch(getSlots());
+
   }
 
 
-  getSlots(){
+  getSlot(){
     let slotId=0;
-    if(this.availableSlots.length>0){
+    
+    if(this.availableSlots.length>0 ){
+      if(this.props.booked.length>0){
+
+        for(let bk of this.props.booked){
+          console.log("bk id"+bk.slotId);
+          
+          this.availableSlots.filter(slot=> {
+            console.log("slot id"+slot.id);
+            return slot.id !== bk.slotId;
+          })
+        }
+      }
        slotId=this.availableSlots[Math.floor(Math.random() * this.availableSlots.length)].id
       console.log("val",slotId);
-    }
+  }
     return slotId
+
   }
 
 
@@ -74,11 +92,11 @@ const mapStateToProps = (state) => {
     this.updateState(name,value)
    this.floors=[]
    this.availableSlots=[]
-   slots[value].forEach((fl,j)=>{
+   this.props.slots[value].forEach((fl,j)=>{
       Object.keys(fl).map(floor=>{
         this.floors.push(floor);
       })})
-      this.availableSlots=slots[value]["0"][this.floors[0]].filter(ob => ob.isBooked ==="false")
+      this.availableSlots=this.props.slots[value]["0"][this.floors[0]].filter(ob => ob.isBooked ==="false")
       this.updateState("floor",this.floors[0]);
   }
 
@@ -87,15 +105,16 @@ const mapStateToProps = (state) => {
     const value = event.target.value    
     this.availableSlots=[]
     this.updateState(name,value)
-    this.availableSlots=slots[this.state.block]["1"][value].filter(ob => ob.isBooked ==="false")
+    this.availableSlots=this.props.slots[this.state.block]["1"][value].filter(ob => ob.isBooked ==="false")
 }
 handleBooking(){
   console.log("You have booked a slot:", JSON.stringify(this.state));
+  this.props.confirmBooking(this.state);
 }
 
 handleFormSubmit = event => {
     event.preventDefault();
-    var id=this.getSlots();
+    var id=this.getSlot();
     this.setState({
       slotId: id,
       bookedDateTime: moment(new Date()).format('YYYY-MM-DDTHH:mm:ss.SSS'),
@@ -129,7 +148,7 @@ render(){
                   className="form-control"
                   id="blook">
                     <option value='' disabled={true}></option>
-                    { Object.keys(slots).map((block,i)=>
+                    { Object.keys(this.props.slots).map((block,i)=>
                      <option key={i} value={block}>{block}</option>)}
                 </select>                 
               </div>
@@ -199,5 +218,5 @@ render(){
 
 }
 
-export default connect(mapStateToProps)(BookingLayout);
+export default connect(mapStateToProps,mapDispatchToProps)(BookingLayout);
 

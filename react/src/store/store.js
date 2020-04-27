@@ -1,6 +1,7 @@
 import { createStore, combineReducers,applyMiddleware,compose } from "redux";
 import thunk from "redux-thunk";
 import employeeReducer from '../reducers/main-reducer'
+import bookingReducer from '../reducers/booking-reducer'
 
 //import createSagaMiddleware from "redux-saga";
 //import watcherSaga from '../sagas/api-saga'
@@ -8,6 +9,7 @@ import employeeReducer from '../reducers/main-reducer'
 
 const rootReducer = combineReducers({
   employee: employeeReducer,
+  booking:bookingReducer
 });
 const store = createStore(
    rootReducer,

@@ -1,7 +1,10 @@
 import React, {Component} from 'react'
 import Configuration from '../../routes'
 import { connect } from "react-redux";
-import { addEmployee, editEmployee } from "../../actions/employee-action";
+//import { addEmployee, editEmployee } from "../../actions/employee-action";
+
+//This is to test api without elasticsearch
+import {addEmployee,editEmployee} from '../../actions/employee-mock-actions'
 
 
  class CreateEmployee extends Component {
@@ -16,7 +19,8 @@ import { addEmployee, editEmployee } from "../../actions/employee-action";
       userName: '',
       email: '',
       contactNo: '',
-      gender: ''
+      gender: '',
+      tier:''
     }
     if (this.props.location.state) {
       this.state = this.props.location.state

@@ -2,7 +2,9 @@ import React from 'react'
 import Configuration from '../../routes'
 import {Link} from 'react-router-dom'
 import { connect } from "react-redux";
-import {getEmployees,deleteEmployee} from '../../actions/employee-action'
+//import {getEmployees,deleteEmployee} from '../../actions/employee-action'
+//This is to test api without elasticsearch
+import {getEmployees,deleteEmployee} from '../../actions/employee-mock-actions'
 
 const mapStateToProps = (state) => {
   return {
